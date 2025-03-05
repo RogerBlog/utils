@@ -9,13 +9,15 @@ Ultralytics YOLO format
 
 # 类别映射表，定义每个类别对应的ID
 label_to_class_id = {
-    "fracture": 0,
+    "in": 0,
+    "center":1,
+    "out":2,
     # 根据需要添加更多类别
 }
 
 
 # json转txt
-def convert_labelme_json_to_yolo(json_file, output_dir, img_width, img_height):
+def convert_labelme_json_to_yolo(json_file, output_dir):
     with open(json_file, 'r') as f:
         labelme_data = json.load(f)
 
@@ -24,6 +26,8 @@ def convert_labelme_json_to_yolo(json_file, output_dir, img_width, img_height):
 
     # 输出的txt文件路径
     txt_file_path = os.path.join(output_dir, f"{file_name}.txt")
+    img_width = labelme_data['imageWidth']
+    img_height = labelme_data['imageHeight']
 
     with open(txt_file_path, 'w') as txt_file:
         for shape in labelme_data['shapes']:
@@ -49,10 +53,10 @@ def convert_labelme_json_to_yolo(json_file, output_dir, img_width, img_height):
 
 
 if __name__ == "__main__":
-    json_dir = r"C:\Users\Administrator\Desktop\test\20250228_zhengjie_seg"  # 替换为LabelMe标注的JSON文件目录
-    output_dir = r"C:\Users\Administrator\Desktop\test\20250228_zhengjie_seg_labels"  # 输出的YOLO格式txt文件目录
-    img_width = 3072  # 图像宽度，根据实际图片尺寸设置
-    img_height = 3072  # 图像高度，根据实际图片尺寸设置
+    json_dir = r"E:\opencvProject\LYJ\LFS\images\20250304\labels_seg_json"  # 替换为LabelMe标注的JSON文件目录
+    output_dir = r"E:\opencvProject\LYJ\LFS\images\20250304\labels_seg"  # 输出的YOLO格式txt文件目录
+    # img_width = 3072  # 图像宽度，根据实际图片尺寸设置
+    # img_height = 3072  # 图像高度，根据实际图片尺寸设置
 
     # 创建输出文件夹
     if not os.path.exists(output_dir):
@@ -62,4 +66,4 @@ if __name__ == "__main__":
     for json_file in os.listdir(json_dir):
         if json_file.endswith(".json"):
             json_path = os.path.join(json_dir, json_file)
-            convert_labelme_json_to_yolo(json_path, output_dir, img_width, img_height)
+            convert_labelme_json_to_yolo(json_path, output_dir)
