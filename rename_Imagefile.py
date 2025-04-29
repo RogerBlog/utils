@@ -1,51 +1,47 @@
 import os
-from PIL import Image
+import shutil
 import datetime
 
-# 设置图像文件夹路径
-folder_path = r'E:\opencvProject\LYJ\YongSheng\images\20250307\img'
-output_path = r'E:\opencvProject\LYJ\YongSheng\images\20250307\img_'
+# 源文件夹（包含图像和标签文件，例如 .json 文件）
+source_folder = r'E:\opencvProject\LYJ\LiSheng\images\20250221\20250221_roi\images_copy'
+# 目标文件夹（将复制后的图像与标签都存放在此文件夹）
+dest_folder = r'E:\opencvProject\LYJ\LiSheng\images\20250221\20250221_roi\images2'
 
-# 获取当前时间并格式化
+os.makedirs(dest_folder, exist_ok=True)
+
+# 获取当前时间并格式化（作为新文件名的一部分）
 current_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+counter = 1
 
 # 支持的图片扩展名列表
 image_extensions = ['.jpg', '.jpeg', '.png', '.bmp', '.gif', '.webp', '.tiff']
 
-# 初始化计数器
-counter = 1
-
-# 创建输出文件夹（可选）
-output_folder = os.path.join(folder_path, output_path)
-os.makedirs(output_folder, exist_ok=True)
-
-for filename in os.listdir(folder_path):
-    file_path = os.path.join(folder_path, filename)
-
-    # 跳过子目录和非文件项
+for filename in os.listdir(source_folder):
+    file_path = os.path.join(source_folder, filename)
     if not os.path.isfile(file_path):
         continue
 
-    # 检查文件扩展名
     ext = os.path.splitext(filename)[1].lower()
     if ext in image_extensions:
-        try:
-            # 打开图像文件
-            with Image.open(file_path) as img:
-                # 处理图像模式
-                if img.mode in ('RGBA', 'LA'):
-                    img = img.convert('RGBA')
-                else:
-                    img = img.convert('RGB')
+        # 根据当前时间和计数器生成新的文件名（保持原图片扩展名）
+        new_base = f"{current_time}_{counter}"
+        new_image_name = new_base + ext
+        dest_image_path = os.path.join(dest_folder, new_image_name)
 
-                # 生成新文件名
-                new_filename = f"{current_time}_{counter}.png"
-                save_path = os.path.join(output_folder, new_filename)
+        # 复制图像文件到目标文件夹
+        shutil.copyfile(file_path, dest_image_path)
+        print(f"图像复制成功：{filename} -> {new_image_name}")
 
-                # 保存图像
-                img.save(save_path, 'PNG')
-                print(f"成功转换：{filename} -> {new_filename}")
-                counter += 1
+        # 假设标签文件与图像同名，扩展名为 .json
+        label_filename = os.path.splitext(filename)[0] + '.txt'
+        label_file_path = os.path.join(source_folder, label_filename)
+        if os.path.exists(label_file_path):
+            # 标签文件用和图像文件相同的命名规则，新扩展名固定为 .json
+            new_label_name = new_base + '.txt'
+            dest_label_path = os.path.join(dest_folder, new_label_name)
+            shutil.copyfile(label_file_path, dest_label_path)
+            print(f"标签复制成功：{label_filename} -> {new_label_name}")
+        else:
+            print(f"未找到标签文件：{label_filename}")
 
-        except Exception as e:
-            print(f"处理 {filename} 时出错：{str(e)}")
+        counter += 1

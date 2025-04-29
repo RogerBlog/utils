@@ -3,9 +3,8 @@ import os
 
 # 类别映射字典
 CLASS_MAPPING = {
-    'in': 0,
-    'center': 1,
-    'out': 2
+    'toy': 0,
+
 }
 
 
@@ -73,6 +72,6 @@ def batch_convert(json_dir, output_dir):
 
 
 # 使用示例
-json_folder = r'E:\opencvProject\LYJ\LFS\images\20250304\labels_json'
-output_folder = r'E:\opencvProject\LYJ\LFS\images\20250304\labels'
+json_folder = r'E:\opencvProject\LYJ\McDonald\images\labels_json'
+output_folder = r'E:\opencvProject\LYJ\McDonald\images\labels'
 batch_convert(json_folder, output_folder)

@@ -10,8 +10,7 @@ Ultralytics YOLO format
 # 类别映射表，定义每个类别对应的ID
 label_to_class_id = {
     "in": 0,
-    "center":1,
-    "out":2,
+    "out":1,
     # 根据需要添加更多类别
 }
 
@@ -53,8 +52,8 @@ def convert_labelme_json_to_yolo(json_file, output_dir):
 
 
 if __name__ == "__main__":
-    json_dir = r"E:\opencvProject\LYJ\LFS\images\20250304\labels_seg_json"  # 替换为LabelMe标注的JSON文件目录
-    output_dir = r"E:\opencvProject\LYJ\LFS\images\20250304\labels_seg"  # 输出的YOLO格式txt文件目录
+    json_dir = r"E:\opencvProject\LYJ\XinYongSheng\images\20250318\labels_seg_json"  # 替换为LabelMe标注的JSON文件目录
+    output_dir = r"E:\opencvProject\LYJ\XinYongSheng\images\20250318\labels_seg_seg"  # 输出的YOLO格式txt文件目录
     # img_width = 3072  # 图像宽度，根据实际图片尺寸设置
     # img_height = 3072  # 图像高度，根据实际图片尺寸设置
 
